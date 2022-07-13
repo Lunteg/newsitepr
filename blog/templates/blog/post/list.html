@@ -1,0 +1,24 @@
+<!-- наследование -->
+{% extends "blog/index.html" %}  
+  
+{% block title %}My Blog{% endblock %}  
+  
+{% block content %}  
+  <h1>Блог и точка</h1>  
+  {% for post in posts %}  
+    <h2>  
+      <a href="{{ post.get_absolute_url }}">  
+       {{ post.title }}  
+      </a>  
+    </h2> 
+    <p class="date">  
+      Published {{ post.publ_date }} by {{ post.author }}  
+    </p>
+    {% if user.id == post.author.id %}
+      <a href="{% url 'blog:post_edit' post.pk %}">- Редактировать -</a> 
+    {% endif %}
+    <!-- truncateword оставляет только n-ое количество слов -->
+    {{ post.body|truncatewords:30|linebreaks }}  
+  {% endfor %} 
+  {% include "../pagination.html" with page=posts %} 
+{% endblock %}
